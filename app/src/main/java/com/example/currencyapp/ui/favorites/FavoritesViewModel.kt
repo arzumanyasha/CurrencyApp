@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.rates
+package com.example.currencyapp.ui.favorites
 
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.data.repository.CurrencyRepository
@@ -13,11 +13,10 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class RatesViewModel @Inject constructor(
+class FavoritesViewModel @Inject constructor(
     private val repository: CurrencyRepository,
     private val preferenceManager: PreferenceManager
 ) : BaseRatesViewModel(repository, preferenceManager) {
-
     override fun convert() {
         viewModelScope.launch {
             currentCurrency.combine(sortOrder) { currentCurrency, sortOrder ->
@@ -25,7 +24,7 @@ class RatesViewModel @Inject constructor(
             }.collectLatest { (currentCurrency, sortOrder) ->
                 _result.value = CurrencyEvent.Loading
                 try {
-                    repository.getRatesByCurrency(
+                    repository.getFavoriteRates(
                         currentCurrency.name.lowercase(Locale.getDefault()),
                         sortOrder
                     ).collect {
@@ -38,4 +37,3 @@ class RatesViewModel @Inject constructor(
         }
     }
 }
-

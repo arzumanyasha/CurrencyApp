@@ -18,7 +18,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun rateDao(): RateDao
 
     companion object {
-        const val DB_VERSION = 1
+        const val DB_VERSION = 3
         const val DB_NAME = "Currency.db"
         const val RATES_TABLE = "rate_table"
         const val CURRENCY_TABLE = "currency_table"

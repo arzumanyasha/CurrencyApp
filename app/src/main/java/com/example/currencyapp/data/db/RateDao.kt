@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.currencyapp.data.model.local.Rate
-import com.example.currencyapp.ui.rates.SortOrder
 import com.example.currencyapp.util.DateUtils
 import kotlinx.coroutines.flow.Flow
 
@@ -18,8 +17,12 @@ interface RateDao {
             "CASE WHEN :sortOption = 3 THEN value END DESC")
     fun getRates(base: String, sortOption: Int) : Flow<List<Rate>>
 
-    @Query("SELECT * FROM rate_table WHERE base = :base AND isFavorite = 1 ORDER BY id")
-    fun getFavoriteRates(base: String/*, sortOption: String? = null*/) : Flow<List<Rate>>
+    @Query("SELECT * FROM rate_table WHERE base = :base AND isFavorite = 1 ORDER BY " +
+            "CASE WHEN :sortOption = 0 THEN currency END ASC, " +
+            "CASE WHEN :sortOption = 1 THEN currency END DESC, " +
+            "CASE WHEN :sortOption = 2 THEN value END ASC, " +
+            "CASE WHEN :sortOption = 3 THEN value END DESC")
+    fun getFavoriteRates(base: String, sortOption: Int) : Flow<List<Rate>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRates(rates: List<Rate>)

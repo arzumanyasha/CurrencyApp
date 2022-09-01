@@ -2,7 +2,6 @@ package com.example.currencyapp.data.model.remote
 
 import com.example.currencyapp.data.model.local.Rate
 import com.example.currencyapp.util.DateUtils
-import java.util.*
 import kotlin.collections.ArrayList
 
 object CurrencyMapper {

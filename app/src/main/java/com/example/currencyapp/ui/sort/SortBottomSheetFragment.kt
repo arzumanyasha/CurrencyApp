@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyapp.R
 import com.example.currencyapp.data.model.local.SortOrder
@@ -12,11 +13,13 @@ import com.example.currencyapp.databinding.FragmentSortBottomSheetBinding
 import com.example.currencyapp.ui.rates.RatesViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SortBottomSheetFragment : BottomSheetDialogFragment(), SortAdapter.SortItemListener {
 
     private val viewModel: RatesViewModel by viewModels()
+    private lateinit var binding: FragmentSortBottomSheetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,9 +31,17 @@ class SortBottomSheetFragment : BottomSheetDialogFragment(), SortAdapter.SortIte
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentSortBottomSheetBinding.bind(view)
+        binding = FragmentSortBottomSheetBinding.bind(view)
 
-        val sortAdapter = SortAdapter(SortOrder.ALPHABET_ASC, this)
+        lifecycleScope.launch {
+            viewModel.sortOrder.collect { selectedSort ->
+                setSortList(selectedSort)
+            }
+        }
+    }
+
+    private fun setSortList(selectedSort: SortOrder) {
+        val sortAdapter = SortAdapter(selectedSort, this)
         binding.apply {
             sortPickerRecyclerView.apply {
                 adapter = sortAdapter
@@ -42,8 +53,7 @@ class SortBottomSheetFragment : BottomSheetDialogFragment(), SortAdapter.SortIte
     }
 
     override fun onSortSelected(sort: SortOrder) {
-        TODO("Not yet implemented")
+        viewModel.setOrder(sort)
+        dismiss()
     }
-
-
 }

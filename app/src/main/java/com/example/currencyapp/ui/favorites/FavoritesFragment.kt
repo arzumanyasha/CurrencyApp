@@ -1,24 +1,25 @@
 package com.example.currencyapp.ui.favorites
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyapp.R
 import com.example.currencyapp.data.model.local.Rate
 import com.example.currencyapp.databinding.FragmentFavoritesBinding
+import com.example.currencyapp.ui.MainActivity
+import com.example.currencyapp.ui.base.BaseRatesViewModel
 import com.example.currencyapp.ui.rates.RatesAdapter
-import com.example.currencyapp.ui.rates.RatesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class FavoritesFragment : Fragment(R.layout.fragment_favorites), RatesAdapter.RateItemListener {
 
-    private val viewModel: RatesViewModel by viewModels()
+    private val viewModel: FavoritesViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,18 +35,29 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites), RatesAdapter.Ra
             }
         }
 
-        viewModel.convert(true)
+        viewModel.convert()
         lifecycleScope.launchWhenStarted {
             viewModel.result.collect { event ->
-                when(event) {
-                    is RatesViewModel.CurrencyEvent.Success -> {
+                when (event) {
+                    is BaseRatesViewModel.CurrencyEvent.Success -> {
+                        binding.progressBar.visibility = View.GONE
                         ratesAdapter.submitList(event.rates)
+                        (requireActivity() as MainActivity).updateToolbarTitle(
+                            event.rates.first().base.uppercase(
+                                Locale.getDefault()
+                            )
+                        )
                     }
-                    is RatesViewModel.CurrencyEvent.Failure -> {
-
+                    is BaseRatesViewModel.CurrencyEvent.Failure -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            activity,
+                            getString(R.string.error_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                    is RatesViewModel.CurrencyEvent.Loading -> {
-
+                    is BaseRatesViewModel.CurrencyEvent.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     else -> Unit
                 }

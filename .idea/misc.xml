@@ -7,7 +7,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2902208201892745" />
         <entry key="app/src/main/res/layout/currency_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_currency_bottom_sheet.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.23125" />
+        <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_rates.xml" value="0.23125" />
         <entry key="app/src/main/res/layout/fragment_sort_bottom_sheet.xml" value="0.11195542046605876" />
         <entry key="app/src/main/res/layout/rate_item.xml" value="0.1" />

@@ -1,15 +1,14 @@
 package com.example.currencyapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -23,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         setToolbar()
         setUpNavigation()
-
     }
 
     private fun setToolbar() {
@@ -43,5 +41,9 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
+    }
+
+    fun updateToolbarTitle(base: String) {
+        binding.baseTextView.text = base
     }
 }
